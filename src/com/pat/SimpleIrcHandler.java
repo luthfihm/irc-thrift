@@ -15,6 +15,7 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
     private class Channel {
         public String name;
         public List<Integer> users = new ArrayList<Integer>();
+        public List<String> message;
     }
 
     private int counter;
@@ -101,17 +102,46 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
     }
 
     @Override
-    public String sendToAllChannel(String name) throws TException {
+    public String sendToAllChannel(String name, String message) throws TException {
         return null;
     }
 
     @Override
-    public String sendToChannel(String name, String channel) throws TException {
+    public String sendToChannel(String name, String channel, String message) throws TException {
+        boolean isChannelExist = false;
+        boolean isMember = false;
+        int i = 0;
+        int indexOfChannel = 0;
+        for (Channel channel1 : channels) {
+            if (channel1.name.equals(channel))
+            {
+                isChannelExist = true;
+                if (channel1.users.contains(users.indexOf(name))) {
+                    isMember = true;
+                    indexOfChannel = i;
+                }
+            }
+            i++;
+        }
+        if (isChannelExist && isMember)
+        {
+            Channel channel1 = channels.get(indexOfChannel);
+            channel1.message.add("[" + channel + "]" + "(" + name + ") " + message);
+            return "OK";
+        }
+        else if (!isChannelExist)
+        {
+            return "Channel " + channel + "does not exist.";
+        }
+        else if (!isMember)
+        {
+            return "You are not the member of channel " + channel + ".";
+        }
         return null;
     }
 
     @Override
-    public String getMessage(String name) throws TException {
+    public List<String> getMessage(String name, String channel) throws TException {
         return null;
     }
 }

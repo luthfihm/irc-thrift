@@ -48,11 +48,11 @@ public class SimpleIrcService {
 
     public String exit(String name) throws org.apache.thrift.TException;
 
-    public String sendToAllChannel(String name) throws org.apache.thrift.TException;
+    public String sendToAllChannel(String name, String message) throws org.apache.thrift.TException;
 
-    public String sendToChannel(String name, String channel) throws org.apache.thrift.TException;
+    public String sendToChannel(String name, String channel, String message) throws org.apache.thrift.TException;
 
-    public String getMessage(String name) throws org.apache.thrift.TException;
+    public List<String> getMessage(String name, String channel) throws org.apache.thrift.TException;
 
   }
 
@@ -68,11 +68,11 @@ public class SimpleIrcService {
 
     public void exit(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
-    public void sendToAllChannel(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+    public void sendToAllChannel(String name, String message, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
-    public void sendToChannel(String name, String channel, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+    public void sendToChannel(String name, String channel, String message, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
-    public void getMessage(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+    public void getMessage(String name, String channel, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -213,16 +213,17 @@ public class SimpleIrcService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "exit failed: unknown result");
     }
 
-    public String sendToAllChannel(String name) throws org.apache.thrift.TException
+    public String sendToAllChannel(String name, String message) throws org.apache.thrift.TException
     {
-      send_sendToAllChannel(name);
+      send_sendToAllChannel(name, message);
       return recv_sendToAllChannel();
     }
 
-    public void send_sendToAllChannel(String name) throws org.apache.thrift.TException
+    public void send_sendToAllChannel(String name, String message) throws org.apache.thrift.TException
     {
       sendToAllChannel_args args = new sendToAllChannel_args();
       args.setName(name);
+      args.setMessage(message);
       sendBase("sendToAllChannel", args);
     }
 
@@ -236,17 +237,18 @@ public class SimpleIrcService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "sendToAllChannel failed: unknown result");
     }
 
-    public String sendToChannel(String name, String channel) throws org.apache.thrift.TException
+    public String sendToChannel(String name, String channel, String message) throws org.apache.thrift.TException
     {
-      send_sendToChannel(name, channel);
+      send_sendToChannel(name, channel, message);
       return recv_sendToChannel();
     }
 
-    public void send_sendToChannel(String name, String channel) throws org.apache.thrift.TException
+    public void send_sendToChannel(String name, String channel, String message) throws org.apache.thrift.TException
     {
       sendToChannel_args args = new sendToChannel_args();
       args.setName(name);
       args.setChannel(channel);
+      args.setMessage(message);
       sendBase("sendToChannel", args);
     }
 
@@ -260,20 +262,21 @@ public class SimpleIrcService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "sendToChannel failed: unknown result");
     }
 
-    public String getMessage(String name) throws org.apache.thrift.TException
+    public List<String> getMessage(String name, String channel) throws org.apache.thrift.TException
     {
-      send_getMessage(name);
+      send_getMessage(name, channel);
       return recv_getMessage();
     }
 
-    public void send_getMessage(String name) throws org.apache.thrift.TException
+    public void send_getMessage(String name, String channel) throws org.apache.thrift.TException
     {
       getMessage_args args = new getMessage_args();
       args.setName(name);
+      args.setChannel(channel);
       sendBase("getMessage", args);
     }
 
-    public String recv_getMessage() throws org.apache.thrift.TException
+    public List<String> recv_getMessage() throws org.apache.thrift.TException
     {
       getMessage_result result = new getMessage_result();
       receiveBase(result, "getMessage");
@@ -467,24 +470,27 @@ public class SimpleIrcService {
       }
     }
 
-    public void sendToAllChannel(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+    public void sendToAllChannel(String name, String message, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      sendToAllChannel_call method_call = new sendToAllChannel_call(name, resultHandler, this, ___protocolFactory, ___transport);
+      sendToAllChannel_call method_call = new sendToAllChannel_call(name, message, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class sendToAllChannel_call extends org.apache.thrift.async.TAsyncMethodCall {
       private String name;
-      public sendToAllChannel_call(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private String message;
+      public sendToAllChannel_call(String name, String message, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.name = name;
+        this.message = message;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("sendToAllChannel", org.apache.thrift.protocol.TMessageType.CALL, 0));
         sendToAllChannel_args args = new sendToAllChannel_args();
         args.setName(name);
+        args.setMessage(message);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -499,9 +505,9 @@ public class SimpleIrcService {
       }
     }
 
-    public void sendToChannel(String name, String channel, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+    public void sendToChannel(String name, String channel, String message, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      sendToChannel_call method_call = new sendToChannel_call(name, channel, resultHandler, this, ___protocolFactory, ___transport);
+      sendToChannel_call method_call = new sendToChannel_call(name, channel, message, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
@@ -509,10 +515,12 @@ public class SimpleIrcService {
     public static class sendToChannel_call extends org.apache.thrift.async.TAsyncMethodCall {
       private String name;
       private String channel;
-      public sendToChannel_call(String name, String channel, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private String message;
+      public sendToChannel_call(String name, String channel, String message, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.name = name;
         this.channel = channel;
+        this.message = message;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
@@ -520,6 +528,7 @@ public class SimpleIrcService {
         sendToChannel_args args = new sendToChannel_args();
         args.setName(name);
         args.setChannel(channel);
+        args.setMessage(message);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -534,29 +543,32 @@ public class SimpleIrcService {
       }
     }
 
-    public void getMessage(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+    public void getMessage(String name, String channel, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getMessage_call method_call = new getMessage_call(name, resultHandler, this, ___protocolFactory, ___transport);
+      getMessage_call method_call = new getMessage_call(name, channel, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getMessage_call extends org.apache.thrift.async.TAsyncMethodCall {
       private String name;
-      public getMessage_call(String name, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private String channel;
+      public getMessage_call(String name, String channel, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.name = name;
+        this.channel = channel;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getMessage", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getMessage_args args = new getMessage_args();
         args.setName(name);
+        args.setChannel(channel);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public String getResult() throws org.apache.thrift.TException {
+      public List<String> getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -705,7 +717,7 @@ public class SimpleIrcService {
 
       public sendToAllChannel_result getResult(I iface, sendToAllChannel_args args) throws org.apache.thrift.TException {
         sendToAllChannel_result result = new sendToAllChannel_result();
-        result.success = iface.sendToAllChannel(args.name);
+        result.success = iface.sendToAllChannel(args.name, args.message);
         return result;
       }
     }
@@ -725,7 +737,7 @@ public class SimpleIrcService {
 
       public sendToChannel_result getResult(I iface, sendToChannel_args args) throws org.apache.thrift.TException {
         sendToChannel_result result = new sendToChannel_result();
-        result.success = iface.sendToChannel(args.name, args.channel);
+        result.success = iface.sendToChannel(args.name, args.channel, args.message);
         return result;
       }
     }
@@ -745,7 +757,7 @@ public class SimpleIrcService {
 
       public getMessage_result getResult(I iface, getMessage_args args) throws org.apache.thrift.TException {
         getMessage_result result = new getMessage_result();
-        result.success = iface.getMessage(args.name);
+        result.success = iface.getMessage(args.name, args.channel);
         return result;
       }
     }
@@ -1076,7 +1088,7 @@ public class SimpleIrcService {
       }
 
       public void start(I iface, sendToAllChannel_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
-        iface.sendToAllChannel(args.name,resultHandler);
+        iface.sendToAllChannel(args.name, args.message,resultHandler);
       }
     }
 
@@ -1127,11 +1139,11 @@ public class SimpleIrcService {
       }
 
       public void start(I iface, sendToChannel_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
-        iface.sendToChannel(args.name, args.channel,resultHandler);
+        iface.sendToChannel(args.name, args.channel, args.message,resultHandler);
       }
     }
 
-    public static class getMessage<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getMessage_args, String> {
+    public static class getMessage<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getMessage_args, List<String>> {
       public getMessage() {
         super("getMessage");
       }
@@ -1140,10 +1152,10 @@ public class SimpleIrcService {
         return new getMessage_args();
       }
 
-      public AsyncMethodCallback<String> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+      public AsyncMethodCallback<List<String>> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new AsyncMethodCallback<String>() { 
-          public void onComplete(String o) {
+        return new AsyncMethodCallback<List<String>>() { 
+          public void onComplete(List<String> o) {
             getMessage_result result = new getMessage_result();
             result.success = o;
             try {
@@ -1177,8 +1189,8 @@ public class SimpleIrcService {
         return false;
       }
 
-      public void start(I iface, getMessage_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
-        iface.getMessage(args.name,resultHandler);
+      public void start(I iface, getMessage_args args, org.apache.thrift.async.AsyncMethodCallback<List<String>> resultHandler) throws TException {
+        iface.getMessage(args.name, args.channel,resultHandler);
       }
     }
 
@@ -5000,6 +5012,7 @@ public class SimpleIrcService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sendToAllChannel_args");
 
     private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -5008,10 +5021,12 @@ public class SimpleIrcService {
     }
 
     public String name; // required
+    public String message; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      NAME((short)1, "name");
+      NAME((short)1, "name"),
+      MESSAGE((short)2, "message");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -5028,6 +5043,8 @@ public class SimpleIrcService {
         switch(fieldId) {
           case 1: // NAME
             return NAME;
+          case 2: // MESSAGE
+            return MESSAGE;
           default:
             return null;
         }
@@ -5073,6 +5090,8 @@ public class SimpleIrcService {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.NAME, new org.apache.thrift.meta_data.FieldMetaData("name", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sendToAllChannel_args.class, metaDataMap);
     }
@@ -5081,10 +5100,12 @@ public class SimpleIrcService {
     }
 
     public sendToAllChannel_args(
-      String name)
+      String name,
+      String message)
     {
       this();
       this.name = name;
+      this.message = message;
     }
 
     /**
@@ -5093,6 +5114,9 @@ public class SimpleIrcService {
     public sendToAllChannel_args(sendToAllChannel_args other) {
       if (other.isSetName()) {
         this.name = other.name;
+      }
+      if (other.isSetMessage()) {
+        this.message = other.message;
       }
     }
 
@@ -5103,6 +5127,7 @@ public class SimpleIrcService {
     @Override
     public void clear() {
       this.name = null;
+      this.message = null;
     }
 
     public String getName() {
@@ -5129,6 +5154,30 @@ public class SimpleIrcService {
       }
     }
 
+    public String getMessage() {
+      return this.message;
+    }
+
+    public sendToAllChannel_args setMessage(String message) {
+      this.message = message;
+      return this;
+    }
+
+    public void unsetMessage() {
+      this.message = null;
+    }
+
+    /** Returns true if field message is set (has been assigned a value) and false otherwise */
+    public boolean isSetMessage() {
+      return this.message != null;
+    }
+
+    public void setMessageIsSet(boolean value) {
+      if (!value) {
+        this.message = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case NAME:
@@ -5139,6 +5188,14 @@ public class SimpleIrcService {
         }
         break;
 
+      case MESSAGE:
+        if (value == null) {
+          unsetMessage();
+        } else {
+          setMessage((String)value);
+        }
+        break;
+
       }
     }
 
@@ -5146,6 +5203,9 @@ public class SimpleIrcService {
       switch (field) {
       case NAME:
         return getName();
+
+      case MESSAGE:
+        return getMessage();
 
       }
       throw new IllegalStateException();
@@ -5160,6 +5220,8 @@ public class SimpleIrcService {
       switch (field) {
       case NAME:
         return isSetName();
+      case MESSAGE:
+        return isSetMessage();
       }
       throw new IllegalStateException();
     }
@@ -5186,6 +5248,15 @@ public class SimpleIrcService {
           return false;
       }
 
+      boolean this_present_message = true && this.isSetMessage();
+      boolean that_present_message = true && that.isSetMessage();
+      if (this_present_message || that_present_message) {
+        if (!(this_present_message && that_present_message))
+          return false;
+        if (!this.message.equals(that.message))
+          return false;
+      }
+
       return true;
     }
 
@@ -5197,6 +5268,11 @@ public class SimpleIrcService {
       list.add(present_name);
       if (present_name)
         list.add(name);
+
+      boolean present_message = true && (isSetMessage());
+      list.add(present_message);
+      if (present_message)
+        list.add(message);
 
       return list.hashCode();
     }
@@ -5215,6 +5291,16 @@ public class SimpleIrcService {
       }
       if (isSetName()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.name, other.name);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetMessage()).compareTo(other.isSetMessage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetMessage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -5244,6 +5330,14 @@ public class SimpleIrcService {
         sb.append("null");
       } else {
         sb.append(this.name);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("message:");
+      if (this.message == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.message);
       }
       first = false;
       sb.append(")");
@@ -5297,6 +5391,14 @@ public class SimpleIrcService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 2: // MESSAGE
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.message = iprot.readString();
+                struct.setMessageIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -5315,6 +5417,11 @@ public class SimpleIrcService {
         if (struct.name != null) {
           oprot.writeFieldBegin(NAME_FIELD_DESC);
           oprot.writeString(struct.name);
+          oprot.writeFieldEnd();
+        }
+        if (struct.message != null) {
+          oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
+          oprot.writeString(struct.message);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -5338,19 +5445,29 @@ public class SimpleIrcService {
         if (struct.isSetName()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetMessage()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetName()) {
           oprot.writeString(struct.name);
+        }
+        if (struct.isSetMessage()) {
+          oprot.writeString(struct.message);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, sendToAllChannel_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.name = iprot.readString();
           struct.setNameIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.message = iprot.readString();
+          struct.setMessageIsSet(true);
         }
       }
     }
@@ -5723,6 +5840,7 @@ public class SimpleIrcService {
 
     private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)1);
     private static final org.apache.thrift.protocol.TField CHANNEL_FIELD_DESC = new org.apache.thrift.protocol.TField("channel", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)3);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -5732,11 +5850,13 @@ public class SimpleIrcService {
 
     public String name; // required
     public String channel; // required
+    public String message; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       NAME((short)1, "name"),
-      CHANNEL((short)2, "channel");
+      CHANNEL((short)2, "channel"),
+      MESSAGE((short)3, "message");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -5755,6 +5875,8 @@ public class SimpleIrcService {
             return NAME;
           case 2: // CHANNEL
             return CHANNEL;
+          case 3: // MESSAGE
+            return MESSAGE;
           default:
             return null;
         }
@@ -5802,6 +5924,8 @@ public class SimpleIrcService {
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.CHANNEL, new org.apache.thrift.meta_data.FieldMetaData("channel", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sendToChannel_args.class, metaDataMap);
     }
@@ -5811,11 +5935,13 @@ public class SimpleIrcService {
 
     public sendToChannel_args(
       String name,
-      String channel)
+      String channel,
+      String message)
     {
       this();
       this.name = name;
       this.channel = channel;
+      this.message = message;
     }
 
     /**
@@ -5828,6 +5954,9 @@ public class SimpleIrcService {
       if (other.isSetChannel()) {
         this.channel = other.channel;
       }
+      if (other.isSetMessage()) {
+        this.message = other.message;
+      }
     }
 
     public sendToChannel_args deepCopy() {
@@ -5838,6 +5967,7 @@ public class SimpleIrcService {
     public void clear() {
       this.name = null;
       this.channel = null;
+      this.message = null;
     }
 
     public String getName() {
@@ -5888,6 +6018,30 @@ public class SimpleIrcService {
       }
     }
 
+    public String getMessage() {
+      return this.message;
+    }
+
+    public sendToChannel_args setMessage(String message) {
+      this.message = message;
+      return this;
+    }
+
+    public void unsetMessage() {
+      this.message = null;
+    }
+
+    /** Returns true if field message is set (has been assigned a value) and false otherwise */
+    public boolean isSetMessage() {
+      return this.message != null;
+    }
+
+    public void setMessageIsSet(boolean value) {
+      if (!value) {
+        this.message = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case NAME:
@@ -5906,6 +6060,14 @@ public class SimpleIrcService {
         }
         break;
 
+      case MESSAGE:
+        if (value == null) {
+          unsetMessage();
+        } else {
+          setMessage((String)value);
+        }
+        break;
+
       }
     }
 
@@ -5916,6 +6078,9 @@ public class SimpleIrcService {
 
       case CHANNEL:
         return getChannel();
+
+      case MESSAGE:
+        return getMessage();
 
       }
       throw new IllegalStateException();
@@ -5932,6 +6097,8 @@ public class SimpleIrcService {
         return isSetName();
       case CHANNEL:
         return isSetChannel();
+      case MESSAGE:
+        return isSetMessage();
       }
       throw new IllegalStateException();
     }
@@ -5967,6 +6134,15 @@ public class SimpleIrcService {
           return false;
       }
 
+      boolean this_present_message = true && this.isSetMessage();
+      boolean that_present_message = true && that.isSetMessage();
+      if (this_present_message || that_present_message) {
+        if (!(this_present_message && that_present_message))
+          return false;
+        if (!this.message.equals(that.message))
+          return false;
+      }
+
       return true;
     }
 
@@ -5983,6 +6159,11 @@ public class SimpleIrcService {
       list.add(present_channel);
       if (present_channel)
         list.add(channel);
+
+      boolean present_message = true && (isSetMessage());
+      list.add(present_message);
+      if (present_message)
+        list.add(message);
 
       return list.hashCode();
     }
@@ -6011,6 +6192,16 @@ public class SimpleIrcService {
       }
       if (isSetChannel()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.channel, other.channel);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetMessage()).compareTo(other.isSetMessage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetMessage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -6048,6 +6239,14 @@ public class SimpleIrcService {
         sb.append("null");
       } else {
         sb.append(this.channel);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("message:");
+      if (this.message == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.message);
       }
       first = false;
       sb.append(")");
@@ -6109,6 +6308,14 @@ public class SimpleIrcService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 3: // MESSAGE
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.message = iprot.readString();
+                struct.setMessageIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -6132,6 +6339,11 @@ public class SimpleIrcService {
         if (struct.channel != null) {
           oprot.writeFieldBegin(CHANNEL_FIELD_DESC);
           oprot.writeString(struct.channel);
+          oprot.writeFieldEnd();
+        }
+        if (struct.message != null) {
+          oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
+          oprot.writeString(struct.message);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -6158,19 +6370,25 @@ public class SimpleIrcService {
         if (struct.isSetChannel()) {
           optionals.set(1);
         }
-        oprot.writeBitSet(optionals, 2);
+        if (struct.isSetMessage()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
         if (struct.isSetName()) {
           oprot.writeString(struct.name);
         }
         if (struct.isSetChannel()) {
           oprot.writeString(struct.channel);
         }
+        if (struct.isSetMessage()) {
+          oprot.writeString(struct.message);
+        }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, sendToChannel_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(2);
+        BitSet incoming = iprot.readBitSet(3);
         if (incoming.get(0)) {
           struct.name = iprot.readString();
           struct.setNameIsSet(true);
@@ -6178,6 +6396,10 @@ public class SimpleIrcService {
         if (incoming.get(1)) {
           struct.channel = iprot.readString();
           struct.setChannelIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.message = iprot.readString();
+          struct.setMessageIsSet(true);
         }
       }
     }
@@ -6549,6 +6771,7 @@ public class SimpleIrcService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMessage_args");
 
     private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField CHANNEL_FIELD_DESC = new org.apache.thrift.protocol.TField("channel", org.apache.thrift.protocol.TType.STRING, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -6557,10 +6780,12 @@ public class SimpleIrcService {
     }
 
     public String name; // required
+    public String channel; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      NAME((short)1, "name");
+      NAME((short)1, "name"),
+      CHANNEL((short)2, "channel");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -6577,6 +6802,8 @@ public class SimpleIrcService {
         switch(fieldId) {
           case 1: // NAME
             return NAME;
+          case 2: // CHANNEL
+            return CHANNEL;
           default:
             return null;
         }
@@ -6622,6 +6849,8 @@ public class SimpleIrcService {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.NAME, new org.apache.thrift.meta_data.FieldMetaData("name", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.CHANNEL, new org.apache.thrift.meta_data.FieldMetaData("channel", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMessage_args.class, metaDataMap);
     }
@@ -6630,10 +6859,12 @@ public class SimpleIrcService {
     }
 
     public getMessage_args(
-      String name)
+      String name,
+      String channel)
     {
       this();
       this.name = name;
+      this.channel = channel;
     }
 
     /**
@@ -6642,6 +6873,9 @@ public class SimpleIrcService {
     public getMessage_args(getMessage_args other) {
       if (other.isSetName()) {
         this.name = other.name;
+      }
+      if (other.isSetChannel()) {
+        this.channel = other.channel;
       }
     }
 
@@ -6652,6 +6886,7 @@ public class SimpleIrcService {
     @Override
     public void clear() {
       this.name = null;
+      this.channel = null;
     }
 
     public String getName() {
@@ -6678,6 +6913,30 @@ public class SimpleIrcService {
       }
     }
 
+    public String getChannel() {
+      return this.channel;
+    }
+
+    public getMessage_args setChannel(String channel) {
+      this.channel = channel;
+      return this;
+    }
+
+    public void unsetChannel() {
+      this.channel = null;
+    }
+
+    /** Returns true if field channel is set (has been assigned a value) and false otherwise */
+    public boolean isSetChannel() {
+      return this.channel != null;
+    }
+
+    public void setChannelIsSet(boolean value) {
+      if (!value) {
+        this.channel = null;
+      }
+    }
+
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case NAME:
@@ -6688,6 +6947,14 @@ public class SimpleIrcService {
         }
         break;
 
+      case CHANNEL:
+        if (value == null) {
+          unsetChannel();
+        } else {
+          setChannel((String)value);
+        }
+        break;
+
       }
     }
 
@@ -6695,6 +6962,9 @@ public class SimpleIrcService {
       switch (field) {
       case NAME:
         return getName();
+
+      case CHANNEL:
+        return getChannel();
 
       }
       throw new IllegalStateException();
@@ -6709,6 +6979,8 @@ public class SimpleIrcService {
       switch (field) {
       case NAME:
         return isSetName();
+      case CHANNEL:
+        return isSetChannel();
       }
       throw new IllegalStateException();
     }
@@ -6735,6 +7007,15 @@ public class SimpleIrcService {
           return false;
       }
 
+      boolean this_present_channel = true && this.isSetChannel();
+      boolean that_present_channel = true && that.isSetChannel();
+      if (this_present_channel || that_present_channel) {
+        if (!(this_present_channel && that_present_channel))
+          return false;
+        if (!this.channel.equals(that.channel))
+          return false;
+      }
+
       return true;
     }
 
@@ -6746,6 +7027,11 @@ public class SimpleIrcService {
       list.add(present_name);
       if (present_name)
         list.add(name);
+
+      boolean present_channel = true && (isSetChannel());
+      list.add(present_channel);
+      if (present_channel)
+        list.add(channel);
 
       return list.hashCode();
     }
@@ -6764,6 +7050,16 @@ public class SimpleIrcService {
       }
       if (isSetName()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.name, other.name);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetChannel()).compareTo(other.isSetChannel());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetChannel()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.channel, other.channel);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -6793,6 +7089,14 @@ public class SimpleIrcService {
         sb.append("null");
       } else {
         sb.append(this.name);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("channel:");
+      if (this.channel == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.channel);
       }
       first = false;
       sb.append(")");
@@ -6846,6 +7150,14 @@ public class SimpleIrcService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 2: // CHANNEL
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.channel = iprot.readString();
+                struct.setChannelIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -6864,6 +7176,11 @@ public class SimpleIrcService {
         if (struct.name != null) {
           oprot.writeFieldBegin(NAME_FIELD_DESC);
           oprot.writeString(struct.name);
+          oprot.writeFieldEnd();
+        }
+        if (struct.channel != null) {
+          oprot.writeFieldBegin(CHANNEL_FIELD_DESC);
+          oprot.writeString(struct.channel);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -6887,19 +7204,29 @@ public class SimpleIrcService {
         if (struct.isSetName()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetChannel()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetName()) {
           oprot.writeString(struct.name);
+        }
+        if (struct.isSetChannel()) {
+          oprot.writeString(struct.channel);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getMessage_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           struct.name = iprot.readString();
           struct.setNameIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.channel = iprot.readString();
+          struct.setChannelIsSet(true);
         }
       }
     }
@@ -6909,7 +7236,7 @@ public class SimpleIrcService {
   public static class getMessage_result implements org.apache.thrift.TBase<getMessage_result, getMessage_result._Fields>, java.io.Serializable, Cloneable, Comparable<getMessage_result>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMessage_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -6917,7 +7244,7 @@ public class SimpleIrcService {
       schemes.put(TupleScheme.class, new getMessage_resultTupleSchemeFactory());
     }
 
-    public String success; // required
+    public List<String> success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -6982,7 +7309,8 @@ public class SimpleIrcService {
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMessage_result.class, metaDataMap);
     }
@@ -6991,7 +7319,7 @@ public class SimpleIrcService {
     }
 
     public getMessage_result(
-      String success)
+      List<String> success)
     {
       this();
       this.success = success;
@@ -7002,7 +7330,8 @@ public class SimpleIrcService {
      */
     public getMessage_result(getMessage_result other) {
       if (other.isSetSuccess()) {
-        this.success = other.success;
+        List<String> __this__success = new ArrayList<String>(other.success);
+        this.success = __this__success;
       }
     }
 
@@ -7015,11 +7344,26 @@ public class SimpleIrcService {
       this.success = null;
     }
 
-    public String getSuccess() {
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<String> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(String elem) {
+      if (this.success == null) {
+        this.success = new ArrayList<String>();
+      }
+      this.success.add(elem);
+    }
+
+    public List<String> getSuccess() {
       return this.success;
     }
 
-    public getMessage_result setSuccess(String success) {
+    public getMessage_result setSuccess(List<String> success) {
       this.success = success;
       return this;
     }
@@ -7045,7 +7389,7 @@ public class SimpleIrcService {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((String)value);
+          setSuccess((List<String>)value);
         }
         break;
 
@@ -7200,8 +7544,18 @@ public class SimpleIrcService {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.success = iprot.readString();
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list0 = iprot.readListBegin();
+                  struct.success = new ArrayList<String>(_list0.size);
+                  String _elem1;
+                  for (int _i2 = 0; _i2 < _list0.size; ++_i2)
+                  {
+                    _elem1 = iprot.readString();
+                    struct.success.add(_elem1);
+                  }
+                  iprot.readListEnd();
+                }
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -7224,7 +7578,14 @@ public class SimpleIrcService {
         oprot.writeStructBegin(STRUCT_DESC);
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeString(struct.success);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.success.size()));
+            for (String _iter3 : struct.success)
+            {
+              oprot.writeString(_iter3);
+            }
+            oprot.writeListEnd();
+          }
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -7250,7 +7611,13 @@ public class SimpleIrcService {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          oprot.writeString(struct.success);
+          {
+            oprot.writeI32(struct.success.size());
+            for (String _iter4 : struct.success)
+            {
+              oprot.writeString(_iter4);
+            }
+          }
         }
       }
 
@@ -7259,7 +7626,16 @@ public class SimpleIrcService {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = iprot.readString();
+          {
+            org.apache.thrift.protocol.TList _list5 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+            struct.success = new ArrayList<String>(_list5.size);
+            String _elem6;
+            for (int _i7 = 0; _i7 < _list5.size; ++_i7)
+            {
+              _elem6 = iprot.readString();
+              struct.success.add(_elem6);
+            }
+          }
           struct.setSuccessIsSet(true);
         }
       }
