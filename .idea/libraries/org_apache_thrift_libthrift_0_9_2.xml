@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="org.apache.thrift:libthrift:0.9.2" type="repository">
+    <properties maven-id="org.apache.thrift:libthrift:0.9.2" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/libthrift-0.9.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.5.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/servlet-api-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient-4.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpcore-4.2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-codec-1.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/libthrift-0.9.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
