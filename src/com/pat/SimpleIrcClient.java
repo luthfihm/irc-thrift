@@ -55,6 +55,13 @@ public class SimpleIrcClient {
                 } else {
                     System.out.println(response);
                 }
+            } else if (args[0].equals("leave")) {
+                String response = client.leave(user, args[1]);
+                if (response.equals("OK")) {
+                    System.out.println("You have left channel "+args[1]);
+                } else {
+                    System.out.println(response);
+                }
             }
         } while (!exit);
     }

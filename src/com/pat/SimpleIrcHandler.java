@@ -91,7 +91,34 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
 
     @Override
     public String leave(String name, String channel) throws TException {
-        return null;
+        boolean found = false;
+        int i = 0;
+        int indexOfChannel = 0;
+        for (Channel channel1 : channels) {
+            if (channel1.name.equals(channel))
+            {
+                found = true;
+                indexOfChannel = i;
+            }
+            i++;
+        }
+        if (found)
+        {
+            Channel channel1 = channels.get(indexOfChannel);
+            if (channel1.users.contains(users.indexOf(name)))
+            {
+                channel1.users.remove(users.indexOf(name));
+                channels.set(indexOfChannel, channel1);
+                System.out.println(name + " has left channel " + channel + ".");
+                return "OK";
+            } else {
+                return "You are not member of channel " + channel;
+            }
+        }
+        else
+        {
+            return "Channel " + channel + " is not available.";
+        }
     }
 
     @Override
