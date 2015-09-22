@@ -1,11 +1,13 @@
-package com.pat;
+package SimpleIrcClient;
 
+import SimpleIrcServer.SimpleIrcService;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -59,6 +61,27 @@ public class SimpleIrcClient {
                 String response = client.leave(user, args[1]);
                 if (response.equals("OK")) {
                     System.out.println("You have left channel "+args[1]);
+                } else {
+                    System.out.println(response);
+                }
+            } else if (args[0].equals("get")) {
+                List<String> messages = client.getMessage(user,args[1]);
+                for (String message : messages){
+                    System.out.println(message);
+                }
+            } else if (args[0].startsWith("@")) {
+                String channel = args[0].substring(1);
+                String message = input.replaceFirst(args[0]+" ","");
+                String response = client.sendToChannel(user, channel, message);
+                if (response.equals("OK")) {
+                    System.out.println("You have sent a message to channel " + channel);
+                } else {
+                    System.out.println(response);
+                }
+            } else {
+                String response = client.sendToAllChannel(user, input);
+                if (response.equals("OK")) {
+                    System.out.println("You have sent a message to all channel.");
                 } else {
                     System.out.println(response);
                 }

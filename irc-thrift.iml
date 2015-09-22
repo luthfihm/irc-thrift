@@ -12,5 +12,6 @@
     <orderEntry type="library" name="org.slf4j:slf4j-log4j12:1.5.8" level="project" />
     <orderEntry type="library" name="org.slf4j:slf4j-api:1.5.8" level="project" />
     <orderEntry type="library" name="org.apache.commons:commons-lang3:3.3.2" level="project" />
+    <orderEntry type="library" name="com.baulsupp.kolja:jcurses:0.9.5.3" level="project" />
   </component>
 </module>

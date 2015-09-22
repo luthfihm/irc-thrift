@@ -1,10 +1,8 @@
-package com.pat;
+package SimpleIrcServer;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.thrift.TException;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -15,7 +13,7 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
     private class Channel {
         public String name;
         public List<Integer> users = new ArrayList<Integer>();
-        public List<String> message;
+        public List<String> messages = new ArrayList<String>();
     }
 
     private int counter;
@@ -130,7 +128,22 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
 
     @Override
     public String sendToAllChannel(String name, String message) throws TException {
-        return null;
+        int i = 0;
+        int numberOfChannel = 0;
+        for (Channel channel1 : channels) {
+            if (channel1.users.contains(users.indexOf(name))) {
+                channel1.messages.add("[" + channel1.name + "]" + "(" + name + ") " + message);
+                channels.set(i,channel1);
+                System.out.println(name + " has sent a message to channel " + channel1.name);
+                numberOfChannel++;
+            }
+            i++;
+        }
+        if (numberOfChannel > 0) {
+            return "OK";
+        } else {
+            return "You haven't join any channel.";
+        }
     }
 
     @Override
@@ -153,12 +166,14 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
         if (isChannelExist && isMember)
         {
             Channel channel1 = channels.get(indexOfChannel);
-            channel1.message.add("[" + channel + "]" + "(" + name + ") " + message);
+            channel1.messages.add("[" + channel + "]" + "(" + name + ") " + message);
+            channels.set(indexOfChannel,channel1);
+            System.out.println(name + " has sent a message to channel " + channel);
             return "OK";
         }
         else if (!isChannelExist)
         {
-            return "Channel " + channel + "does not exist.";
+            return "Channel " + channel + " does not exist.";
         }
         else if (!isMember)
         {
@@ -169,6 +184,36 @@ public class SimpleIrcHandler implements SimpleIrcService.Iface {
 
     @Override
     public List<String> getMessage(String name, String channel) throws TException {
-        return null;
+        boolean isChannelExist = false;
+        boolean isMember = false;
+        int i = 0;
+        int indexOfChannel = 0;
+        List<String> result = null;
+        for (Channel channel1 : channels) {
+            if (channel1.name.equals(channel))
+            {
+                isChannelExist = true;
+                if (channel1.users.contains(users.indexOf(name))) {
+                    isMember = true;
+                    indexOfChannel = i;
+                }
+            }
+            i++;
+        }
+        if (isChannelExist && isMember)
+        {
+            result = channels.get(indexOfChannel).messages;
+        }
+        else if (!isChannelExist)
+        {
+            result = new ArrayList<String>();
+            result.add("Channel " + channel + " does not exist.");
+        }
+        else if (!isMember)
+        {
+            result = new ArrayList<String>();
+            result.add("You are not the member of channel " + channel + ".");
+        }
+        return result;
     }
 }
